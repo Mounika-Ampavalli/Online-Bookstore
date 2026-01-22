@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Paper Pulse</title>
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+{% include 'store/navbar.html' %}
+
+<!-- ================= PAGE TITLE ================= -->
+<h1 class="main-title">Paper Pulse</h1>
+<p class="subtitle">Discover your favorite book</p>
+
+<!-- ================= SEARCH BAR ================= -->
+<div class="search-bar-wrapper">
+    <form method="GET" class="search-bar">
+        <input
+            type="text"
+            name="q"
+            placeholder="Search books by title or author..."
+            value="{{ request.GET.q }}"
+        >
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<!-- ================= LAYOUT ================= -->
+<div class="home-layout">
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar">
+        <h3>Categories</h3>
+
+        <ul class="category-list">
+            <!-- ALL BOOKS -->
+            <li>
+                <a href="{% url 'home' %}">All Books</a>
+            </li>
+
+            <!-- CATEGORY LINKS -->
+            <li><a href="{% url 'home' %}?category=Programming">Programming</a></li>
+            <li><a href="{% url 'home' %}?category=Fiction">Fiction</a></li>
+            <li><a href="{% url 'home' %}?category=Technology">Technology</a></li>
+            <li><a href="{% url 'home' %}?category=Education">Education</a></li>
+            <li><a href="{% url 'home' %}?category=Science">Science</a></li>
+            <li><a href="{% url 'home' %}?category=Non fiction">Non fiction</a></li>
+            <li><a href="{% url 'home' %}?category=Love">Love</a></li>
+            <li><a href="{% url 'home' %}?category=Horror">Horror</a></li>
+            <li><a href="{% url 'home' %}?category=Romantic">Romantic</a></li>
+            <li><a href="{% url 'home' %}?category=Thriller/Mystery">Thriller/Mystery</a></li>
+            <li><a href="{% url 'home' %}?category=Competitive">Competitive</a></li>
+            <li><a href="{% url 'home' %}?category=Novels">Novels</a></li>
+            <li><a href="{% url 'home' %}?category=History">History</a></li>
+            <li><a href="{% url 'home' %}?category=Biography">Biography</a></li>
+            <li><a href="{% url 'home' %}?category=Comics">Comics</a></li>
+            <li><a href="{% url 'home' %}?category=Self-help">Self-help</a></li>
+            <li><a href="{% url 'home' %}?category=Poetry">Poetry</a></li>
+            <li><a href="{% url 'home' %}?category=Children">Children</a></li>
+            <li><a href="{% url 'home' %}?category=Motivational">Motivational</a></li>
+            <li><a href="{% url 'home' %}?category=Fantasy">Fantasy</a></li>
+        </ul>
+    </div>
+
+    <!-- ===== BOOK GRID ===== -->
+   {% if books %}
+<div class="book-container">
+    {% for book in books %}
+        <div class="book-card" id="book-{{ book.id }}">
+            <a href="{% url 'book_detail' book.id %}">
+                {% if book.image %}
+                    <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                {% endif %}
+            </a>
+
+            <a href="{% url 'book_detail' book.id %}" class="book-title-link">
+                <h3>{{ book.title }}</h3>
+            </a>
+
+            <p class="author">by {{ book.author }}</p>
+            <p class="price">₹{{ book.price }}</p>
+
+            <a href="{% url 'add_to_cart' book.id %}?next={{ request.get_full_path }}#book-{{ book.id }}">
+                <button class="btn">Add to Cart</button>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="no-books">No books found.</p>
+{% endif %}
+ 
+   
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ book.title }} | Paper Pulse</title>
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body>
+
+{% include 'store/navbar.html' %}
+
+<div class="book-detail-container">
+
+    <div class="book-detail-card">
+
+        <div class="book-detail-image">
+            {% if book.image %}
+                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+            {% endif %}
+        </div>
+
+        <div class="book-detail-info">
+            <h1>{{ book.title }}</h1>
+            <p class="author">by {{ book.author }}</p>
+
+            <p class="category">
+                Category: {{ book.category }}
+            </p>
+
+            <p class="price">₹{{ book.price }}</p>
+
+            <p class="description">
+                {{ book.description|default:"No description available." }}
+            </p>
+
+            <div class="book-actions">
+                <a href="{% url 'add_to_cart' book.id %}" class="btn">
+                    Add to Cart
+                </a>
+
+                <a href="{% url 'add_to_wishlist' book.id %}" class="btn wishlist-btn">
+                    ❤️ Add to Wishlist
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

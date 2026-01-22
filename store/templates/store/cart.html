@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart | Paper Pulse</title>
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body>
+
+{% include 'store/navbar.html' %}
+
+<div class="cart-page">
+
+    <h1 class="cart-title">Your Cart</h1>
+
+    {% if cart_items %}
+    <div class="cart-layout">
+
+        <!-- LEFT: CART ITEMS -->
+        <div class="cart-items">
+
+            {% for item in cart_items %}
+            <div class="cart-item-card">
+
+                <div class="cart-img">
+                    {% if item.book.image %}
+                        <img src="{{ item.book.image.url }}" alt="{{ item.book.title }}">
+                    {% endif %}
+                </div>
+
+                <div class="cart-details">
+                    <h3>
+                        {{ item.book.title }}
+                        <button
+                            type="button"
+                            class="remove-btn"
+                            data-remove-url="{% url 'remove_from_cart' item.book.id %}"
+                            onclick="openRemoveModal(this)">
+                            🗑 Remove
+                        </button>
+                    </h3>
+
+                    <p class="price">₹{{ item.book.price }}</p>
+
+                    <div class="qty-controls">
+                        <a href="{% url 'decrease_qty' item.book.id %}" class="qty-btn">−</a>
+                        <span class="qty">{{ item.qty }}</span>
+                        <a href="{% url 'increase_qty' item.book.id %}" class="qty-btn">+</a>
+                    </div>
+                </div>
+
+                <div class="cart-subtotal">
+                    ₹{{ item.subtotal }}
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <!-- RIGHT: ORDER SUMMARY -->
+        <div class="cart-summary-card">
+            <h2>Order Summary</h2>
+
+            <div class="summary-row">
+                <span>Total Items</span>
+                <span>{{ cart_count }}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>₹{{ total_price }}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Delivery</span>
+                <span class="free">FREE</span>
+            </div>
+
+            <hr>
+
+            <div class="summary-row total">
+                <span>Total Payable</span>
+                <span>₹{{ total_price }}</span>
+            </div>
+
+            <a href="{% url 'checkout' %}">
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </a>
+        </div>
+
+    </div>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+
+</div>
+
+<!-- ================= REMOVE CONFIRM MODAL ================= -->
+<div id="removeModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>Remove Item</h3>
+        <p>Are you sure you want to remove this item from your cart?</p>
+
+        <div class="modal-actions">
+            <button type="button" class="modal-cancel" onclick="closeRemoveModal()">
+                Cancel
+            </button>
+            <a id="confirmRemoveLink" class="modal-confirm">
+                Yes, Remove
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+function openRemoveModal(button) {
+    const removeUrl = button.getAttribute("data-remove-url");
+    document.getElementById("confirmRemoveLink").href = removeUrl;
+    document.getElementById("removeModal").classList.add("active");
+}
+
+function closeRemoveModal() {
+    document.getElementById("removeModal").classList.remove("active");
+}
+</script>
+
+</body>
+</html>

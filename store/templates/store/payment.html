@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment | Paper Pulse</title>
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body>
+
+{% include 'store/navbar.html' %}
+
+<div class="payment-wrapper">
+
+    <h1 class="payment-heading">Payment</h1>
+
+    <div class="payment-box">
+
+        <!-- LEFT : ORDER SUMMARY -->
+        <div class="payment-summary">
+            <h3>Order Summary</h3>
+
+            <div class="summary-row">
+                <span>Total Items</span>
+                <span>{{ cart_count }}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>₹{{ total_price }}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Delivery Charges</span>
+                <span class="free">FREE</span>
+            </div>
+
+            <hr>
+
+            <div class="summary-row total">
+                <span>Total Payable</span>
+                <span>₹{{ total_price }}</span>
+            </div>
+        </div>
+
+        <!-- RIGHT : PAYMENT METHODS -->
+        <form method="post" action="{% url 'payment' %}">
+    {% csrf_token %}
+
+    <h3>Select Payment Method</h3>
+
+    <label class="payment-option">
+        <input type="radio" name="payment_method" checked>
+        <span>UPI</span>
+    </label>
+
+    <label class="payment-option">
+        <input type="radio" name="payment_method">
+        <span>Credit / Debit Card</span>
+    </label>
+
+    <label class="payment-option">
+        <input type="radio" name="payment_method">
+        <span>Cash on Delivery</span>
+    </label>
+
+    <!-- 🔥 THIS NAME IS THE KEY -->
+    <button type="submit" name="confirm_payment" value="1" class="pay-now-btn">
+        Pay ₹{{ total_price }}
+    </button>
+</form>
+
+    </div>
+
+    <a href="{% url 'checkout' %}" class="back-link">← Back to Checkout</a>
+
+</div>
+
+</body>
+</html>

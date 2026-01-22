@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout | Paper Pulse</title>
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body>
+
+{% include 'store/navbar.html' %}
+
+<div class="checkout-page">
+
+    <h1 class="checkout-title">Checkout</h1>
+
+    <div class="checkout-container">
+
+        <!-- LEFT : DELIVERY DETAILS -->
+        <div class="checkout-form-card">
+            <h2>Delivery Details</h2>
+
+            <!-- ✅ ONLY redirect to payment -->
+            <form method="post" action="{% url 'payment' %}">
+    {% csrf_token %}
+
+    <input type="hidden" name="from_checkout" value="1">
+
+    <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="name" required>
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" required>
+    </div>
+
+    <div class="form-group">
+        <label>Phone</label>
+        <input type="text" name="phone" required>
+    </div>
+
+    <div class="form-group">
+        <label>Address</label>
+        <textarea name="address" required></textarea>
+    </div>
+
+    <button type="submit" class="place-order-btn">
+        Proceed to Payment
+    </button>
+</form>
+
+        </div>
+
+        <!-- RIGHT : ORDER SUMMARY -->
+        <div class="order-summary-card">
+            <h2>Order Summary</h2>
+
+            <div class="summary-row">
+                <span>Total Items</span>
+                <span>{{ cart_count }}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Total</span>
+                <span>₹{{ total_price }}</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

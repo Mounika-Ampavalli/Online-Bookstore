@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Profile | Paper Pulse</title>
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body>
+
+{% include 'store/navbar.html' %}
+
+<div class="profile-page">
+
+    <!-- ================= USER INFO ================= -->
+    <div class="profile-card">
+        <div class="profile-avatar">👤</div>
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.email }}</p>
+    </div>
+
+    <!-- ================= ADDRESS ================= -->
+    <div class="profile-section">
+        <h3>Delivery Address</h3>
+
+        <form method="post" action="{% url 'edit_address' %}" class="address-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="full_name"
+                       value="{{ address.full_name|default:'' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email"
+                       value="{{ address.email|default:user.email }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone"
+                       value="{{ address.phone|default:'' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Address</label>
+                <textarea name="address" rows="3" required>{{ address.address|default:'' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn edit-address-btn">
+                ✏️ Save Address
+            </button>
+        </form>
+    </div>
+
+    <!-- ================= ORDERS ================= -->
+    <div class="orders-card">
+        <div class="orders-title">My Orders</div>
+
+        {% for order in orders %}
+            {% for item in order.items.all %}
+                <div class="order-item">
+
+                    <img src="{{ item.book.image.url }}"
+                         class="order-image"
+                         alt="{{ item.book.title }}">
+
+                    <div class="order-info">
+                        <div class="order-id">
+                            Order #{{ order.id }} · {{ item.book.title }}
+                        </div>
+
+                        <div class="order-date">
+                            {{ order.created_at|date:"M d, Y" }}
+                        </div>
+
+                        <span class="order-status">{{ order.status }}</span>
+                    </div>
+
+                    <div class="order-price">
+                        ₹{{ item.book.price }}
+                    </div>
+
+                </div>
+            {% endfor %}
+        {% empty %}
+            <p class="no-orders">No orders yet</p>
+        {% endfor %}
+    </div>
+
+    <!-- ================= WISHLIST ================= -->
+    <div class="profile-section">
+        <h3>My Wishlist ❤️</h3>
+
+        {% if wishlist_items %}
+            {% for item in wishlist_items %}
+                <div class="wishlist-item">
+                    <img src="{{ item.book.image.url }}" alt="{{ item.book.title }}">
+
+                    <div class="wishlist-info">
+                        <p class="book-title">{{ item.book.title }}</p>
+                        <p class="price">₹{{ item.book.price }}</p>
+
+                        <!-- REMOVE BUTTON -->
+                        <a href="{% url 'remove_from_wishlist' item.book.id %}"
+                           class="wishlist-remove-btn">
+                            Remove
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="muted">Wishlist is empty.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

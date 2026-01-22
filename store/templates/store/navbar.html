@@ -1,0 +1,68 @@
+{% load static %}
+
+<nav class="navbar">
+    <div class="nav-container">
+
+        <!-- LOGO -->
+        <div class="nav-logo">
+            <a href="{% url 'home' %}" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+                <span style="font-size:30px;">📘</span>
+                <div style="line-height:1.1;">
+                    <div style="font-size:22px;font-weight:800;color:#1e40af;">
+                        Paper Pulse
+                    </div>
+                    <div style="font-size:11px;font-weight:600;color:#16a34a;">
+                        Read the Pulse of Knowledge
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- LINKS -->
+        <ul class="nav-links">
+            <li>
+                <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+
+            </li>
+
+            <li>
+                <a href="{% url 'view_cart' %}">
+                    Cart
+                    {% if cart_count > 0 %}
+                        <span class="cart-badge">{{ cart_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+
+           {% if user.is_authenticated %}
+    <li>
+        <a href="{% url 'profile' %}" class="profile-link">
+            👤 {{ user.username }}
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'logout' %}">Logout</a>
+    </li>
+{% else %}
+
+                <li>
+                    <a href="{% url 'login' %}">Login</a>
+                </li>
+                <li>
+                    <a href="{% url 'signup' %}">Signup</a>
+                </li>
+            {% endif %}
+        </ul>
+
+    </div>
+</nav>
+
+{% if messages %}
+<div class="toast-container">
+    {% for message in messages %}
+        <div class="toast {{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}

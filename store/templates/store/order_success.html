@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Placed |Paper Pulse</title>
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body>
+
+{% include 'store/navbar.html' %}
+
+<div class="success-wrapper">
+
+    <div class="success-card">
+
+        <div class="success-icon">✔</div>
+
+        <h1>Order Placed Successfully</h1>
+
+        <p class="success-text">
+            Thank you for shopping with us.<br>
+            Your order has been confirmed and will be delivered soon.
+        </p>
+
+        <div class="success-actions">
+            <a href="{% url 'home' %}" class="success-btn primary">
+                Continue Shopping
+            </a>
+
+            <a href="{% url 'view_cart' %}" class="success-btn secondary">
+                View Cart
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
